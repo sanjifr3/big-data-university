@@ -1,0 +1,22 @@
+- [Narrator] Hello, and welcome to Big Data University.
+In this course, you will get answers
+to fundamental questions such as what is Big Data?
+Where is Big Data coming from?
+And, how can businesses derive value from it?
+The syllabus goes beyond the hype of Big Data
+to talk about adoption, and the skills required
+for data scientists in the Big Data era.
+We will cover the Vs that have come to define Big Data,
+velocity, volume, variety, and veracity,
+as well as the final, and perhaps most important V, value.
+We will look for some use cases for Big Data, and cover
+important considerations, like governance and security.
+We will also provide a high-level introduction to Hadoop.
+We discuss what it is, and why
+it is relevant to a Big Data discussion.
+Once you have taken this course,
+you will be familiar with the terminology used
+in Big Data conversations, and you will have an idea
+of how Big Data can be applied in different industries.
+Thank you for taking the time to learn more about Big Data.
+Happy learning.
