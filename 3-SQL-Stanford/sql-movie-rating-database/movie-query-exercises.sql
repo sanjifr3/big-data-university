@@ -130,36 +130,34 @@ order by re1.name, re2.name;
 /* 6. For each rating that is the lowest (fewest stars) currently in the database, return the reviewer 
       name, movie title, and number of stars. */
 
-/* WRONG ANSWER */
-
-select name,title,stars
-from rating,movie,reviewer 
-where rating.rid = reviewer.rid and movie.mid = rating.mid 
-group by title
-having min(stars) = (select min(stars) from rating)
-order by title,name;
+select name, title, stars
+from reviewer, movie, rating
+where reviewer.rid = rating.rid and rating.mid = movie.mid
+and stars = (select min(stars) from rating);
 
 /* 7. List movie titles and average ratings, from highest-rated to lowest-rated. If two or more movies 
       have the same average rating, list them in alphabetical order. */
-select name,title,stars
-from rating,movie,reviewer 
-where rating.rid = reviewer.rid and movie.mid = rating.mid 
+
+select title, avg(stars)
+from movie, rating
+where movie.mid = rating.mid
 group by title
-having min(stars) = (select min(stars) from rating)
-order by title,name;
+order by avg(stars) desc, title;
 
 /* 8. Find the names of all reviewers who have contributed three or more ratings. (As an extra 
       challenge, try writing the query without HAVING or without COUNT.) */
-select name,title,stars
-from rating,movie,reviewer 
-where rating.rid = reviewer.rid and movie.mid = rating.mid 
-group by title
-having min(stars) = (select min(stars) from rating)
-order by title,name;
+
+select name
+from reviewer
+join rating
+on rating.rid = reviewer.rid
+group by name
+having count(*) >= 3;
 
 /* 9. Some directors directed more than one movie. For all such directors, return the titles of all 
       movies directed by them, along with the director name. Sort by director name, then movie title. 
       (As an extra challenge, try writing the query both with and without COUNT.) */
+
 select title, director
 from movie
 where director in (
@@ -172,44 +170,42 @@ order by director,title;
 /* 10. Find the movie(s) with the highest average rating. Return the movie title(s) and average rating. 
        (Hint: This query is more difficult to write in SQLite than other systems; you might think of it 
        as finding the highest average rating and then choosing the movie(s) with that average rating.)*/
-select title, avg(stars) from movie, rating
-where movie.mid = rating.mid 
+
+select title, avg(stars)
+from movie, rating
+where movie.mid = rating.mid
 group by title
-having avg(stars) = (
-	select max(avg_stars) 
- 	from ( select title, avg(stars) as avg_stars
-			from movie, rating
-			where movie.mid = rating.mid
-			group by title
- 		 )
-		 );
+having avg(stars) = 
+	( select max(avg_stars) from
+		( select avg(stars) as avg_stars
+			from rating 
+			group by mid) )
 
 /* 11. Find the movie(s) with the lowest average rating. Return the movie title(s) and average rating. 
        (Hint: This query may be more difficult to write in SQLite than other systems; you might think of 
        it as finding the lowest average rating and then choosing the movie(s) with that average rating.)
        */
-select title, avg(stars) from movie, rating
-where movie.mid = rating.mid 
+
+select title, avg(stars)
+from movie, rating
+where movie.mid = rating.mid
 group by title
-having avg(stars) = (
-
-
-select min(avg_stars) 
- from ( select title, avg(stars) as avg_stars
-			from movie, rating
-			where movie.mid = rating.mid
-			group by title
- 		 )
-		 );
+having avg(stars) = 
+	( select min(avg_stars) from
+		( select avg(stars) as avg_stars
+			from rating 
+			group by mid) )
 
 
 /* 12. For each director, return the director's name together with the title(s) of the movie(s) they 
        directed that received the highest rating among all of their movies, and the value of that rating. 
        Ignore movies whose director is NULL.*/
-select director,title,max(stars) from movie, rating
-where director is not null
-and movie.mid = rating.mid
-group by directo
+
+select director, title, max(stars)
+from movie, rating
+where movie.mid = rating.mid
+	and director not null
+group by director
 
 
 
